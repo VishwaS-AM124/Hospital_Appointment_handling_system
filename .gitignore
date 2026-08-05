@@ -1,0 +1,46 @@
+# ---------------------------------------------------------------- secrets
+# .env.example is committed; the real .env never is.
+.env
+.env.local
+backend/.env
+frontend/.env
+
+# ---------------------------------------------------------------- python
+backend/venv/
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+
+# Test suite and its tooling — excluded from the submission.
+backend/tests/
+backend/pytest.ini
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ---------------------------------------------------------------- node
+node_modules/
+frontend/dist/
+frontend/.vite/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---------------------------------------------------------------- editors / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+Desktop.ini
+desktop.ini
+
+# ---------------------------------------------------------------- misc
+*.log
+*.bak
+*.tmp
