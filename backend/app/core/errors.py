@@ -38,6 +38,7 @@ ERROR_STATUS: dict[str, int] = {
     "SLOT_ALREADY_BOOKED": 409,
     "APPOINTMENT_NOT_FOUND": 404,
     "APPOINTMENT_NOT_ACTIVE": 409,
+    "ALREADY_BOOKED_BY_YOU": 409,
     "PATIENT_TIME_CONFLICT": 409,
     "CANCEL_WINDOW_CLOSED": 409,
     "COMPLETE_TOO_EARLY": 409,
@@ -77,6 +78,10 @@ ERROR_MESSAGES: dict[str, str] = {
     ),
     "APPOINTMENT_NOT_FOUND": "Appointment not found.",
     "APPOINTMENT_NOT_ACTIVE": "This appointment is already cancelled or completed.",
+    "ALREADY_BOOKED_BY_YOU": (
+        "You already have an appointment on this slot — you can see it under "
+        "My appointments."
+    ),
     "PATIENT_TIME_CONFLICT": (
         "You already have an appointment that overlaps this time."
     ),

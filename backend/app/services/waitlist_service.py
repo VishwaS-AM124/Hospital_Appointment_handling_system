@@ -142,6 +142,15 @@ def list_patient_entries(
         stmt = stmt.where(WaitlistEntry.status.in_(ACTIVE_STATUSES))
     stmt = stmt.order_by(WaitlistEntry.created_at.desc(), WaitlistEntry.id.desc())
     entries = list(db.execute(stmt).scalars())
+
+    # The embedded SlotOut carries waitlist_count, which defaults to 0. Fill it in, or
+    # the patient sees "0 waiting" on a slot they are demonstrably queued for.
+    slots = [entry.slot for entry in entries if entry.slot is not None]
+    if slots:
+        counts = counts_for_slots(db, [slot.id for slot in slots])
+        for slot in slots:
+            slot.waitlist_count = counts.get(slot.id, 0)
+
     for entry in entries:
         decorate(db, entry)
     return entries

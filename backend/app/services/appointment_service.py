@@ -322,6 +322,24 @@ def book_appointment(
         if slot is None:
             raise app_error("SLOT_NOT_FOUND")
 
+        # Checked before the status test below, because the two cases need completely
+        # different answers. "Somebody else has it" means queue up and wait; "you
+        # already have it" means look in your own appointments. Reporting the latter as
+        # SLOT_NOT_OPEN sends the patient off to wait for a slot that is already theirs.
+        theirs_already = db.execute(
+            select(Appointment.id)
+            .where(
+                Appointment.slot_id == slot.id,
+                Appointment.patient_id == patient.id,
+                Appointment.status.in_(
+                    (AppointmentStatus.BOOKED, AppointmentStatus.COMPLETED)
+                ),
+            )
+            .limit(1)
+        ).scalar_one_or_none()
+        if theirs_already is not None:
+            raise app_error("ALREADY_BOOKED_BY_YOU")
+
         # LAYER 2 — rule 2: only an OPEN slot is bookable. Re-read under the lock.
         if slot.status is not SlotStatus.OPEN:
             raise app_error("SLOT_NOT_OPEN")

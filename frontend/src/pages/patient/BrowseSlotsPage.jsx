@@ -243,6 +243,14 @@ function BookModal({ slot, onClose, onBooked, onLostRace }) {
       toast.success('Booked. You can see it under My appointments.')
       onBooked()
     } catch (caught) {
+      // They already hold this slot — the list they clicked from was stale. Sending them
+      // to a waiting queue for their own appointment would be nonsense.
+      if (caught.code === 'ALREADY_BOOKED_BY_YOU') {
+        toast.info(caught.message)
+        onLostRace()
+        return
+      }
+
       // Losing a booking race is an expected outcome, not a bug. The server has already
       // put this patient in the slot's queue and told us their position, so report that
       // rather than a bare failure.
